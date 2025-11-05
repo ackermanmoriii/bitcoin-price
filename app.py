@@ -1,5 +1,8 @@
 import pandas as pd
 import requests
+from flask import Flask
+
+app = Flask(__name__)
 
 def get_bitcoin_price():
     url = "https://api.coindesk.com/v1/bpi/currentprice.json"
@@ -8,6 +11,14 @@ def get_bitcoin_price():
     price = data['bpi']['USD']['rate_float']
     return price
 
-if __name__ == "__main__":
+@app.route('/')
+def home():
     current_price = get_bitcoin_price()
-    print(f"Current Bitcoin price: ${current_price:,.2f} USD")
+    return f"Current Bitcoin price: ${current_price:,.2f} USD"
+
+@app.route('/test')
+def test_route():
+    return "This is a simple test route!"
+
+if __name__ == "__main__":
+    app.run(debug=True)
